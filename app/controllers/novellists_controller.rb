@@ -1,0 +1,2 @@
+class NovellistsController < ApplicationController
+end

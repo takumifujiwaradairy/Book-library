@@ -1,0 +1,50 @@
+<header>
+    <div class="header-logo">
+      <a>
+        <h1>絶版図書</h1>
+      </a>
+    </div>
+    <div class="header-navi">
+      <nav><%= link_to "投稿ページへ", new_tweet_path %></nav>
+      <nav><%= link_to "ログイン", tweets_path %></nav>
+      <nav><%= link_to "新規登録", new_user_registration_path %></nav>
+      <nav><%= link_to 'ログアウト', destroy_user_session_path, method: :delete %></nav>
+      <nav><% if user_signed_in? %>
+        <%= link_to "マイページへ", user_path(current_user.id) %>
+        <% end %></nav>
+    </div>
+</header>
+<div class="new-fielid">
+<h2>投稿編集ページ</h2>
+<strong>(投稿した本の情報を修正したいときはこちらからお願いします)</strong>
+<br>
+<strong>(*投稿を削除してしまうと口コミも消えてしまうので注意してください)
+</strong>
+
+  <%= form_for @tweet do |f| %>
+    <div class="main-field">
+     <div class="field 1">
+      <%= f.label :作品名 %>
+      <%= f.text_field :name %>
+     </div>
+     <div class="field 2">
+      <%= f.label :筆者%>
+      <%= f.text_field :writer%>
+     </div>
+     <div class="field 3">
+      <%= f.label :ISBNコード%>
+      <%= f.number_field :isbn%>
+     </div>
+     <div class="field 4">
+      <%= f.label :image %>
+      <%= f.file_field :image %>
+    </div>
+    <%= f.submit "投稿する" %>
+    <br>
+    
+  
+<% end %>
+<%= button_to "削除する",  tweet_path(@tweet.id), method: :delete %>
+<br>
+<%= link_to "Tweet一覧に戻る", tweets_path %>
+</div>

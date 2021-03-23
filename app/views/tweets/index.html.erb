@@ -1,0 +1,116 @@
+<div class="top-header">
+  <header>
+    <div class="header-logo">
+      <a>
+        <h1>絶版図書</h1>
+      </a>
+    </div>
+    <div class="header-navi">
+      <nav><%= link_to "投稿ページへ", new_tweet_path %></nav>
+      <nav><%= link_to "ログイン", tweets_path %></nav>
+      <nav><%= link_to "新規登録", new_user_registration_path %></nav>
+      <nav><%= link_to 'ログアウト', destroy_user_session_path, method: :delete %></nav>
+      <nav><% if user_signed_in? %>
+        <%= link_to "マイページへ", user_path(current_user.id) %>
+        <% end %></nav>
+    </div>
+  </header>
+  <div class="top-page">
+
+    <div class="jumbotron" style="width:30rem;">
+      <h1 class="display-4">絶版文庫</h1>
+      <p class="lead">過去の作品を再評価しよう！</p>
+      <hr class="my-4">
+      <p>このサイトは、絶版になった本や漫画をメインとした評価サイトです。なかなか目にする事のない作品との出会いを手助けすることを目的としています。</p>
+      <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+    </div>
+    <div id="carouselExampleControls" class="carousel slide" data-ride="carousel" data-interval="2500"
+      data-pause="hover">
+      <div class="carousel-inner">
+        <div class="carousel-item active" style="background-color: red;">
+          <img src="/assets/king.jpeg" class="d-block w-100" alt="...">
+        </div>
+        <div class="carousel-item" style="background-color: yellow;">
+          <img src="/assets/king.jpeg" class="d-block w-100" alt="...">
+        </div>
+        <div class="carousel-item" style="background-color: blue;">
+          <img src="/assets/king.jpeg" class="d-block w-100" alt="...">
+        </div>
+      </div>
+      <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<div class="main">
+  <div class="main-left"></div>
+  <div class="main-center">
+    <div class="info">
+      <%= form_tag({controller:"tweets",action:"index"}, method: :get) do %>
+      <div>
+      <strong>(作品名や著作者名でお調べください)
+      </strong>
+      <%= text_field_tag :search,'',class: 'info-from' %>
+      </div>
+      <div>
+      <%= submit_tag '検索する'  %>
+      </div>
+      <% end %>
+    </div>
+    <br>
+    
+    <div class="tweets-container">
+    
+      <div class="tweets-container-main"><% @tweets.each do |t| %></div>
+      <div class="tweets-container-fraem">
+      <% if t.image.present? %>
+        <%= image_tag t.image_url, size: "250x200",class: "tweets-container-image" %>
+        <% else %>
+        <%= image_tag "noimage.jpg", size: "250x200",class: "tweets-container-image"  %>
+        <% end %>
+      <div class="tweets-container-content">
+      <div class="tweets-container-content1"><%= t.name %></div>
+      <div class="tweets-container-content2"><%= t.writer %></div>
+      <div class="tweets-container-content3"><%= link_to "詳細へ", tweet_path(t.id) %></div>
+      <div class="tweets-container-content4">
+      <% if user_signed_in? && current_user.id == t.user_id %>
+      <%= link_to "編集する", edit_tweet_path(t.id) %>
+      </div>
+      <div class="like">
+      <% if user_signed_in? %>
+      <% if current_user.already_liked?(t) %>
+      <%= link_to tweet_like_path(id: t.id, tweet_id: t.id), method: :delete do %>
+      <i class="fas fa-heart"></i><%= t.likes.count %>
+      <% end %>
+      <% else %>
+      <%= link_to tweet_likes_path(id: t.id, tweet_id: t.id), method: :post do %>
+      <i class="far fa-heart"></i><%= t.likes.count %>
+      <% end %>
+      <% end %>
+      <% else %>
+      <i class="far fa-heart"></i><%= t.likes.count %>
+      <% end %>
+     
+      <% end %>
+     </div>
+      </div>
+      
+      
+      <% end %>
+      </div>
+    
+     
+     </div>
+      <% page_entries_info @tweets %>
+      <%= paginate @tweets %>
+  </div>
+  <div class="main-right"></div>
+</div>

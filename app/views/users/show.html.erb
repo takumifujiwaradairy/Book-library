@@ -1,0 +1,64 @@
+
+<header>
+    <div class="header-logo">
+      <a>
+        <h1>絶版図書</h1>
+      </a>
+    </div>
+    <div class="header-navi">
+      <nav><%= link_to "投稿ページへ", new_tweet_path %></nav>
+      <nav><%= link_to "ログイン", tweets_path %></nav>
+      <nav><%= link_to "新規登録", new_user_registration_path %></nav>
+      <nav><%= link_to 'ログアウト', destroy_user_session_path, method: :delete %></nav>
+      <nav><% if user_signed_in? %>
+        <%= link_to "マイページへ", user_path(current_user.id) %>
+        <% end %></nav>
+    </div>
+</header>
+<div class="user-field">
+ 
+  <div class="user-image">
+  <% if @user.image.present? %>
+        <%= image_tag @user.image_url, size: "250x200" %>
+        <% else %>
+        <%= image_tag "noimage.jpg", size: "250x200" %>
+        <% end %>
+  </div>
+  <div class="user-content">
+  <h1>プロフィール</h1>
+  <p>名前 : <%= @user.name %></p>
+  <p>メールアドレス : <%= @user.email %></p>
+  <p>プロフィール : <%= @user.profile %></p>
+
+  <% if current_user.id == @user.id %>
+    <%= link_to "編集する", edit_user_registration_path %>
+  <% end %>
+</div>
+</div>
+<div class="users-contents">
+  <div class="users-content 1">
+  <h2>ユーザーの投稿一覧</h2>
+  <% @user.tweets.each do |t| %>
+    <%= t.name %><br>
+    <%= t.writer%><br>
+    <% t.isbn%><br>
+  <% end %>
+  </div>
+  <!-- 以下はいいね機能を実装している場合-->
+  <div class="users-content 2">
+  <h2>ユーザーがいいねした投稿一覧</h2>
+  <% @user.liked_tweets.each do |t| %>
+    <%= t.user.name %>
+    <%= t.name %>
+  <% end %>
+  </div>
+  <!-- ここまで-->
+  <div class="users-content 3">
+<h2>ユーザーがしたコメント</h2>
+<% @comments.each do |c| %>
+<%= c.content %>
+<br>
+ <% end %>
+ </div>
+  <%= link_to "Tweet一覧に戻る", tweets_path %>
+</div>

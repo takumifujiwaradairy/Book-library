@@ -1,0 +1,96 @@
+<div class="top-header">
+<header>
+    <div class="header-logo">
+      <a>
+        <h1>絶版図書</h1>
+      </a>
+    </div>
+    <div class="header-navi">
+      <nav><%= link_to "投稿ページへ", new_tweet_path %></nav>
+      <nav><%= link_to "ログイン", tweets_path %></nav>
+      <nav><%= link_to "新規登録", new_user_registration_path %></nav>
+      <nav><%= link_to 'ログアウト', destroy_user_session_path, method: :delete %></nav>
+      <nav><% if user_signed_in? %>
+        <%= link_to "マイページへ", user_path(current_user.id) %>
+        <% end %></nav>
+    </div>
+</header>
+
+  <div class="show-fielid">
+    <div class="show-image">
+    <% if @tweet.image_url.present? %>
+    <%= image_tag @tweet.image_url, size: "400×300"%>
+    <%else%>
+    <%= image_tag "noimage.jpg",size:"400×300"%>
+    <%end%>
+    </div>
+    <div class="show-contents">
+    <div class="show-content-fraem">
+      <div class="show-content 1">
+      <h1>作品名</h1>
+      <p><%= @tweet.name %></p></div>
+      <div class="show-content 2">
+      <h1>著者名</h1>
+      <p><%= @tweet.writer %></p></div>
+      <div class="show-content 3">
+      <h1>ISBN</h1>
+      <p><%= @tweet.isbn %></p></div>
+    </div>
+    </div>
+  </div>
+  
+</div>
+<div class="show-comment-field">
+<div class="show-comment">
+ <% if user_signed_in? %>
+        <% if current_user.already_liked?(@tweet) %>
+            <%= link_to tweet_like_path(@tweet), method: :delete do %>
+              <i class="fas fa-heart"></i><%= @tweet.likes.count %>
+            <% end %>
+        <% else %> 
+            <%= link_to tweet_likes_path(@tweet), method: :post do %>
+                <i class="fas fa-heart"></i><%= @tweet.likes.count %>
+            <% end %>
+        <% end %>
+    <% else %>
+        <i class="fas fa-heart"></i><%= @tweet.likes.count %>
+    <% end %>
+    <div class="comment-wrapper">
+    <p>コメント一覧</p>
+    <% @comments.each do |c| %>
+      <div class="comment-user-prof">
+       <div class="comment-user-prof2">
+       <% if c.user.image.present? %>
+        <%= image_tag c.user.image_url, size: "50x50",class:"comment-image" %>
+        <% else %>
+        <%= image_tag "noimage.jpg", size: "50x50",class:"comment-image" %>
+
+        <% end %>
+        </div>
+        <div class="comment-user-name">
+        </div>
+        <%= c.user.name unless c.user.blank? %>
+        </div>
+        <div class="comment-user-content">
+        <h1 class="comment-user-content2"><%= c.content %></h1>
+        </div>
+      </div>   
+    <% end %>
+    <div class="comment-your-field">
+    <% if user_signed_in? %>
+      <%= form_with(model: [@tweet, @comment], local: true) do |f| %>
+      <div class="text-from">
+        <%= f.text_area :content,size: "100×400" %>
+        </div>
+        <%= button_tag type: "submit" do %>
+          <i class="far fa-comments"></i> コメント
+        <% end %>
+      <% end %>
+    <% end %>
+    </div>
+    <%= link_to "Tweet一覧に戻る", tweets_path %>
+  </div>
+
+  
+</div>
+</div>

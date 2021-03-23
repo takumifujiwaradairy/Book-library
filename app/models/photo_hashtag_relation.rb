@@ -1,0 +1,2 @@
+class PhotoHashtagRelation < ApplicationRecord
+end

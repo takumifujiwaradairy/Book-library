@@ -1,0 +1,45 @@
+
+<header>
+    <div class="header-logo">
+      <a>
+        <h1>絶版図書</h1>
+      </a>
+    </div>
+    <div class="header-navi">
+      <nav><%= link_to "投稿ページへ", new_tweet_path %></nav>
+      <nav><%= link_to "ログイン", tweets_path %></nav>
+      <nav><%= link_to "新規登録", new_user_registration_path %></nav>
+      <nav><%= link_to 'ログアウト', destroy_user_session_path, method: :delete %></nav>
+      <nav><% if user_signed_in? %>
+        <%= link_to "マイページへ", user_path(current_user.id) %>
+        <% end %></nav>
+    </div>
+</header>
+<div class="new-fielid">
+<h2>新規投稿ページ</h2>
+<strong>(まだ投稿されていない本を口コミしたい場合こちらから投稿してください)</strong>
+  <%= form_for @tweet do |f| %>
+    <div class="main-field">
+     <div class="field 1">
+      <%= f.label :作品名 %>
+      <%= f.text_field :name %>
+     </div>
+     <div class="field 2">
+      <%= f.label :筆者%>
+      <%= f.text_field :writer%>
+     </div>
+     <div class="field 3">
+      <%= f.label :ISBNコード%>
+      <%= f.number_field :isbn%>
+     </div>
+     <div class="field 4">
+      <%= f.label :image %>
+      <%= f.file_field :image %>
+    </div>
+    <%= f.submit "投稿する" %>
+  <% end %>
+  <%= link_to "Tweet一覧に戻る", tweets_path %>
+  
+  
+</div>
+
