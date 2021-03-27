@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_23_015145) do
+ActiveRecord::Schema.define(version: 2021_03_23_020414) do
 
   create_table "comments", force: :cascade do |t|
     t.string "content"
@@ -22,6 +22,13 @@ ActiveRecord::Schema.define(version: 2021_03_23_015145) do
     t.index ["user_id"], name: "index_comments_on_user_id"
   end
 
+  create_table "hashtags", force: :cascade do |t|
+    t.string "hashname"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["hashname"], name: "index_hashtags_on_hashname", unique: true
+  end
+
   create_table "likes", force: :cascade do |t|
     t.integer "tweet_id", null: false
     t.integer "user_id", null: false
@@ -29,6 +36,15 @@ ActiveRecord::Schema.define(version: 2021_03_23_015145) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["tweet_id"], name: "index_likes_on_tweet_id"
     t.index ["user_id"], name: "index_likes_on_user_id"
+  end
+
+  create_table "photo_hashtag_relations", force: :cascade do |t|
+    t.integer "photo_id"
+    t.integer "hashtag_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["hashtag_id"], name: "index_photo_hashtag_relations_on_hashtag_id"
+    t.index ["photo_id"], name: "index_photo_hashtag_relations_on_photo_id"
   end
 
   create_table "tweets", force: :cascade do |t|
@@ -59,4 +75,6 @@ ActiveRecord::Schema.define(version: 2021_03_23_015145) do
   add_foreign_key "comments", "users"
   add_foreign_key "likes", "tweets"
   add_foreign_key "likes", "users"
+  add_foreign_key "photo_hashtag_relations", "hashtags"
+  add_foreign_key "photo_hashtag_relations", "photos"
 end
